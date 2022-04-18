@@ -1,21 +1,23 @@
-from dna_features_viewer import GraphicFeature, GraphicRecord
-from bokeh.plotting import figure, output_file, show
+from dna_features_viewer import GraphicFeature, GraphicRecord, BiopythonTranslator
+from bokeh.plotting import figure, output_file, show, save
+
+graphic_record = BiopythonTranslator().translate_record(
+    "test2.gb")
+x = graphic_record.plot_with_bokeh(
+    figure_width=10)
+
+
 output_file("test.html")
 
-features = [
-    GraphicFeature(start=0, end=20, strand=+1, color="#ffd700",
-                   label="Small feature"),
-    GraphicFeature(start=20, end=500, strand=+1, color="#ffcccc",
-                   label="Gene 1 with a very long name"),
-    GraphicFeature(start=400, end=700, strand=-1, color="#cffccc",
-                   label="Gene 2"),
-    GraphicFeature(start=600, end=900, strand=+1, color="#ccccff",
-                   label="Gene 3")
-]
-record = GraphicRecord(sequence_length=1000, features=features)
+save(x)
 
-x = record.plot_with_bokeh(figure_width=10)
+# from Bio import SeqIO
 
-show(x)
-
-print(type(record.plot_with_bokeh(figure_width=5)))
+# with open("../processing-pcr-phred-scores/CRTW-F1-D.fastq", 'r') as input_file:
+#     for record in SeqIO.parse(input_file, "fastq"):
+#         score = record.letter_annotations["phred_quality"]
+# from pybioviz import dashboards
+# import panel as pn
+# # need to load panel extension first
+# pn.extension()
+# app = dashboards.genome_features_viewer("crt-operon-from-Prokka.gff")
